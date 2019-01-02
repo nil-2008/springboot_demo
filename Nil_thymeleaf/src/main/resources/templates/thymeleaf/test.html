@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>thymeleaf标签</title>
+    <!--<script th:src="@{/static/js/test.js}"></script>-->
+</head>
+<body>
+<h1>一般写法</h1>
+<div>
+    用户名:<input th:id="${user.name}" th:name="${user.name}" th:value="${user.name}"/><br/>
+    用户年龄:<input th:value="${user.age}"/><br/>
+    用户生日：<input th:value="${user.birthday}"/><br/>
+    用户生日：<input th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}"/>
+</div>
+<h1>升级写法</h1>
+<div th:object="${user}">
+    用户名:<input th:id="*{name}" th:name="*{name}" th:value="*{name}"/><br/>
+    用户年龄:<input th:value="*{age}"/><br/>
+    用户生日：<input th:value="*{birthday}"/><br/>
+    用户生日：<input th:value="*{#dates.format(birthday,'yyyy-MM-dd HH:mm:ss')}"/>
+</div>
+<h1>text与utext</h1>
+text <span th:text="${user.desc}">text</span><br/>
+utext <span th:utext="${user.desc}">utext</span>
+
+<h1>URL</h1>
+一般：<a href="http://www.sogou.com">网址测试</a><br/>
+th标签： <a href="" th:href="@{http://www.baidu.com}">网址测试</a>
+
+<h1>静态文件引用</h1>
+需要修改配置文件
+
+<h1>form</h1>
+<form th:action="@{/th/postform}" th:object="${user}" method="post" th:method="post">
+    <input type="text" th:field="*{name}">
+    <input type="text" th:field="*{age}">
+    <input type="submit">
+</form>
+<h1>if</h1>
+<div th:if="${user.age} == 18">十八岁的天空</div>
+<div th:if="${user.age} gt 18">你老了</div>
+<div th:if="${user.age} lt 18">你很年轻</div>
+<div th:if="${user.age} ge 18">大于等于</div>
+<div th:if="${user.age} le 18">小于等于</div>
+<h1>selected</h1>
+<select>
+    <option>选择框</option>
+    <option th:selected="${user.name eq 'tom'}">tom</option>
+    <option th:selected="${user.name eq 'jerry'}">jerry</option>
+    <option th:selected="${user.name eq 'jake'}">jake</option>
+</select>
+<h1>table</h1>
+<table>
+    <thead>
+    <th>姓名</th>
+    <th>年龄</th>
+    <th>年龄备注</th>
+    <th>生日</th>
+    </thead>
+    <tbody>
+    <tr th:each="person:${userList}">
+        <td th:text="${person.name}"></td>
+        <td th:text="${person.age}"></td>
+        <td th:text="${person.age gt 18}?你老了:你很年轻"></td>
+        <td th:text="${#dates.format(person.birthday,'yyyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    </tbody>
+</table>
+<h1>switch</h1>
+<div th:switch="${user.name}">
+    <p th:case="'jerry'">jerry</p>
+    <p th:case="#{roles.manager}">管理员</p>
+    <p th:case="#{roles.superadmin}">超管</p>
+    <p th:case="*">其他用户</p>
+</div>
+</body>
+</html>
